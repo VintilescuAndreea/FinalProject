@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -62,5 +63,112 @@ public class RegisterPage extends BasePage{
         emailInput.sendKeys(email);
         passwordInput.sendKeys(password);
         registerButton.click();
+    }
+
+    public boolean isFieldInvalid(WebElement inputField){
+        String classAttribute = inputField.getAttribute("class");
+        return classAttribute.contains("is-invalid");
+    }
+
+    public boolean isFieldValid(WebElement inputField){
+        String classAttribute = inputField.getAttribute("class");
+        return classAttribute.contains("ng-valid");
+    }
+
+
+    public WebElement getFirstNameInput() {
+        return firstNameInput;
+    }
+
+    public void setFirstNameInput(WebElement firstNameInput) {
+        this.firstNameInput = firstNameInput;
+    }
+
+    public WebElement getRegisterButton() {
+        return registerButton;
+    }
+
+    public void setRegisterButton(WebElement registerButton) {
+        this.registerButton = registerButton;
+    }
+
+    public WebElement getPasswordInput() {
+        return passwordInput;
+    }
+
+    public void setPasswordInput(WebElement passwordInput) {
+        this.passwordInput = passwordInput;
+    }
+
+    public WebElement getEmailInput() {
+        return emailInput;
+    }
+
+    public void setEmailInput(WebElement emailInput) {
+        this.emailInput = emailInput;
+    }
+
+    public WebElement getLastNameInput() {
+        return lastNameInput;
+    }
+
+    public void setLastNameInput(WebElement lastNameInput) {
+        this.lastNameInput = lastNameInput;
+    }
+
+    public WebElement getDobInput() {
+        return dobInput;
+    }
+
+    public void setDobInput(WebElement dobInput) {
+        this.dobInput = dobInput;
+    }
+
+    public WebElement getStreetInput() {
+        return streetInput;
+    }
+
+    public void setStreetInput(WebElement streetInput) {
+        this.streetInput = streetInput;
+    }
+
+    public WebElement getPostalCodeInput() {
+        return postalCodeInput;
+    }
+
+    public void setPostalCodeInput(WebElement postalCodeInput) {
+        this.postalCodeInput = postalCodeInput;
+    }
+
+    public WebElement getCityInput() {
+        return cityInput;
+    }
+
+    public void setCityInput(WebElement cityInput) {
+        this.cityInput = cityInput;
+    }
+
+    public WebElement getStateInput() {
+        return stateInput;
+    }
+
+    public void setStateInput(WebElement stateInput) {
+        this.stateInput = stateInput;
+    }
+
+    public WebElement getCountrySelect() {
+        return countrySelect;
+    }
+
+    public void setCountrySelect(WebElement countrySelect) {
+        this.countrySelect = countrySelect;
+    }
+
+    public WebElement getPhoneInput() {
+        return phoneInput;
+    }
+
+    public void setPhoneInput(WebElement phoneInput) {
+        this.phoneInput = phoneInput;
     }
 }
