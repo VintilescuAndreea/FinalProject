@@ -1,8 +1,6 @@
 package pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,21 +13,23 @@ import java.time.Duration;
 
 public class HomePage extends BasePage {
 
-    private String url = "https://practicesoftwaretesting.com/";
-
     public HomePage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(xpath = "//a[@data-test='nav-sign-in']")
+    private static final String url = "https://practicesoftwaretesting.com/";
+    private static final Duration waitTime = Duration.ofSeconds(10);
+
+    @FindBy(css = "[data-test='nav-sign-in']")
     private WebElement signInButton;
 
-    @FindBy(xpath = "//a[@data-test='nav-cart']")
+    @FindBy(css = "[data-test='nav-cart']")
     private WebElement cartButton;
 
-    @FindBy(xpath = "//button[@data-test='add-to-cart' or normalize-space()='Add to cart' or contains(normalize-space(), 'Add to cart')]")
+    @FindBy(css = "[data-test='add-to-cart']")
     private WebElement addToCartButton;
+
 
     public void navigateToHomePage() {
         driver.get(url);
@@ -39,59 +39,52 @@ public class HomePage extends BasePage {
         signInButton.click();
     }
 
-    public void openFirstProductFromListing() {
+    public void openFirstProductFromList() {
         openProductFromListByIndex(1);
     }
 
     public void openProductFromListByIndex(int index) {
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement productLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("(//a[contains(@href,'/product/')])[" + index + "]")));
+        By productByIndex = By.xpath("(//a[contains(@href,'/product/')])[" + index + "]");
+        WebElement productLink = getWait().until(ExpectedConditions.elementToBeClickable(productByIndex));
         productLink.click();
     }
 
-
     public boolean isAddToCartAvailable() {
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOf(addToCartButton));
-        return addToCartButton.isDisplayed() && addToCartButton.isEnabled() && addToCartButton.getAttribute("disabled") == null;
+        try {
+            getWait().until(ExpectedConditions.visibilityOf(addToCartButton));
+            return addToCartButton.isEnabled();
+        } catch (TimeoutException exception) {
+            return false;
+        }
     }
 
     public void clickAddToCart() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        wait.until(ExpectedConditions.visibilityOf(addToCartButton));
-        wait.until(driver -> addToCartButton.isEnabled() && addToCartButton.getAttribute("disabled") == null);
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", addToCartButton);
-
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();
-        } catch (ElementClickInterceptedException exception) {
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCartButton);
-        }
-
-        waitForToastToDisappear(wait);
+        WebElement button = getWait().until(ExpectedConditions.elementToBeClickable(addToCartButton));
+        button.click();
+        waitForToastToDisappear();
     }
 
     public boolean isCartButtonDisplayed() {
-        return cartButton.isDisplayed();
+        try {
+            return getWait().until(ExpectedConditions.visibilityOf(cartButton)).isDisplayed();
+        } catch (TimeoutException exception) {
+            return false;
+        }
     }
 
     public void clickCartButton() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        waitForToastToDisappear(wait);
-        wait.until(ExpectedConditions.elementToBeClickable(cartButton)).click();
+        waitForToastToDisappear();
+        getWait().until(ExpectedConditions.elementToBeClickable(cartButton)).click();
     }
 
-    private void waitForToastToDisappear(WebDriverWait wait) {
-
+    private void waitForToastToDisappear() {
         try {
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div[toast-component]")));
+            getWait().until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div[toast-component]")));
         } catch (TimeoutException ignored) {
         }
+    }
+
+    private WebDriverWait getWait() {
+        return new WebDriverWait(driver, waitTime);
     }
 }

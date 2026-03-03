@@ -17,7 +17,7 @@ public class TestAddFirstProductToCart extends SharedData {
 
         homePage.navigateToHomePage();
         logUtility.infoLog(" Am accesat pagina de home ");
-        homePage.openFirstProductFromListing();
+        homePage.openFirstProductFromList();
         logUtility.infoLog(" Am deschis primul produs din lista de produse ");
         homePage.clickAddToCart();
         logUtility.infoLog(" Am adaugat produsul in cos ");

@@ -1,8 +1,8 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,8 +12,11 @@ import java.util.List;
 
 public class CartPage extends BasePage {
 
-    private final By linePriceLocator = By.cssSelector("[data-test='line-price'], [data-test='cart-item-total-price']");
-    private final By totalLocator = By.cssSelector("[data-test='cart-total'], [data-test='total'], .total-price");
+    @FindBy(css = "[data-test='line-price']")
+    private List<WebElement> linePrices;
+
+    @FindBy(css = "[data-test='cart-total']")
+    private WebElement totalPrice;
 
     public CartPage(WebDriver driver) {
         super(driver);
@@ -21,89 +24,57 @@ public class CartPage extends BasePage {
     }
 
     public void waitUntilCheckoutIsOpened() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.urlContains("/checkout"));
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.urlContains("/checkout"));
     }
 
     public double calculateTotalOfProducts() {
-        List<WebElement> linePrices = driver.findElements(linePriceLocator);
+        if (linePrices.isEmpty()) {
+            throw new IllegalStateException("Nu am gasit preturile produselor din cos.");
+        }
 
-        double sum = 0.0;
-        int counted = 0;
-
+        double sum = 0;
         for (WebElement linePrice : linePrices) {
-            Double parsedValue = extractPrice(linePrice.getText());
-            if (parsedValue != null) {
-                sum += parsedValue;
-                counted++;
-            }
+            sum += parsePrice(linePrice.getText());
         }
 
-        if (counted == 0) {
-            throw new IllegalStateException("Nu am gasit preturi valide pentru produsele din cos.");
-        }
-
-        return roundTo2Decimals(sum);
+        return round(sum);
     }
 
     public double displayCheckoutTotal() {
-        List<WebElement> totals = driver.findElements(totalLocator);
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOf(totalPrice));
 
-        for (WebElement total : totals) {
-            Double parsedValue = extractPrice(total.getText());
-            if (parsedValue != null) {
-                return roundTo2Decimals(parsedValue);
-            }
-        }
-
-        throw new IllegalStateException("Nu am putut identifica totalul de plata pe pagina de checkout/cart.");
+        return round(parsePrice(totalPrice.getText()));
     }
 
-    private Double extractPrice(String text) {
-        String valueOnly = keepOnlyNumbersAndSeparators(text);
-        if (valueOnly.isBlank()) {
-            return null;
-        }
-
-        int lastComma = valueOnly.lastIndexOf(',');
-        int lastDot = valueOnly.lastIndexOf('.');
-        int decimalSeparatorIndex = Math.max(lastComma, lastDot);
-
-        String normalized;
-        if (decimalSeparatorIndex >= 0) {
-            String integerPart = valueOnly.substring(0, decimalSeparatorIndex)
-                    .replace(",", "")
-                    .replace(".", "");
-
-            String decimalPart = valueOnly.substring(decimalSeparatorIndex + 1)
-                    .replace(",", "")
-                    .replace(".", "");
-
-            if (integerPart.isBlank()) {
-                integerPart = "0";
-            }
-
-            normalized = integerPart + "." + decimalPart;
-        } else {
-            normalized = valueOnly;
-        }
-
-        return Double.parseDouble(normalized);
-    }
-
-    private String keepOnlyNumbersAndSeparators(String text) {
-        StringBuilder builder = new StringBuilder();
+    private double parsePrice(String text) {
+        StringBuilder numeric = new StringBuilder();
 
         for (char character : text.toCharArray()) {
-            if (Character.isDigit(character) || character == ',' || character == '.') {
-                builder.append(character);
+            if (Character.isDigit(character) || character == '.' || character == ',') {
+                numeric.append(character);
             }
         }
 
-        return builder.toString();
+        String value = numeric.toString();
+        if (value.isBlank()) {
+            throw new IllegalStateException("Pret invalid: " + text);
+        }
+
+        value = value.replace(',', '.');
+
+        int lastDot = value.lastIndexOf('.');
+        if (lastDot > 0) {
+            String integerPart = value.substring(0, lastDot).replace(".", "");
+            String decimalPart = value.substring(lastDot + 1).replace(".", "");
+            value = integerPart + "." + decimalPart;
+        }
+
+        return Double.parseDouble(value);
     }
 
-    private double roundTo2Decimals(double value) {
+    private double round(double value) {
         return Math.round(value * 100.0) / 100.0;
     }
 }
