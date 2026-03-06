@@ -84,7 +84,4 @@ public class HomePage extends BasePage {
         }
     }
 
-    private WebDriverWait getWait() {
-        return new WebDriverWait(driver, waitTime);
-    }
 }

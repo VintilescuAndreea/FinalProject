@@ -1,5 +1,7 @@
 package pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,6 +19,12 @@ public class CartPage extends BasePage {
 
     @FindBy(css = "[data-test='cart-total']")
     private WebElement totalPrice;
+
+    @FindBy( xpath ="//a[@class='btn btn-danger']")
+    private List<WebElement> removeButtons;
+
+    @FindBy(css = "tr.ng-star-inserted")
+    private List<WebElement> cartProducts;
 
     public CartPage(WebDriver driver) {
         super(driver);
@@ -76,5 +84,35 @@ public class CartPage extends BasePage {
 
     private double round(double value) {
         return Math.round(value * 100.0) / 100.0;
+    }
+    public void waitForToastToDisappear() {
+        try {
+            getWait().until(ExpectedConditions.invisibilityOfElementLocated(
+                    By.cssSelector("div.toast-success") // ajustează selectorul după clasa toast-ului tău
+            ));
+        } catch (TimeoutException e) {
+            // Dacă toast-ul nu dispare în timp, continuăm
+        }
+    }
+
+    public void removeAllProducts() {
+
+        waitForToastToDisappear();
+
+        List<WebElement> removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
+
+        while (!removeButtons.isEmpty()) {
+            // Click pe primul buton
+            getWait().until(ExpectedConditions.elementToBeClickable(removeButtons.get(0))).click();
+
+            // Așteaptă să dispară toast-ul sau confirmarea ștergerii
+            waitForToastToDisappear();
+
+            // Reia lista după fiecare ștergere
+            removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
+        }
+    }
+    public boolean isCartEmpty() {
+        return cartProducts.isEmpty();
     }
 }
