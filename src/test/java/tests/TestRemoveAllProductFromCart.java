@@ -57,7 +57,7 @@ public class TestRemoveAllProductFromCart extends SharedData {
         cartPage.removeAllProducts();
         LogUtility.infoLog("Au fost sterse toate produsele din cos.");
 
-        boolean isCartEmpty = cartPage.isCartEmpty(); // asigură-te că ai metoda asta în CartPage
+        boolean isCartEmpty = cartPage.isCartEmpty();
         if (isCartEmpty) {
             LogUtility.infoLog("Coșul este gol. Test trecut!");
         } else {

@@ -115,4 +115,10 @@ public class CartPage extends BasePage {
     public boolean isCartEmpty() {
         return cartProducts.isEmpty();
     }
+
+    public double getTotalPrice() { // DE COMPLETAT
+    }
+
+    public void removeFirstProduct() {//DE COMPLETAT
+    }
 }
