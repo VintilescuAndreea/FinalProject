@@ -1,9 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -91,7 +88,6 @@ public class CartPage extends BasePage {
                     By.cssSelector("div.toast-success") // ajustează selectorul după clasa toast-ului tău
             ));
         } catch (TimeoutException e) {
-            // Dacă toast-ul nu dispare în timp, continuăm
         }
     }
 
@@ -102,13 +98,8 @@ public class CartPage extends BasePage {
         List<WebElement> removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
 
         while (!removeButtons.isEmpty()) {
-            // Click pe primul buton
             getWait().until(ExpectedConditions.elementToBeClickable(removeButtons.get(0))).click();
-
-            // Așteaptă să dispară toast-ul sau confirmarea ștergerii
             waitForToastToDisappear();
-
-            // Reia lista după fiecare ștergere
             removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
         }
     }
@@ -116,9 +107,28 @@ public class CartPage extends BasePage {
         return cartProducts.isEmpty();
     }
 
-    public double getTotalPrice() { // DE COMPLETAT
+    public double getTotalPrice() {
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOf(totalPrice));
+
+        return round(parsePrice(totalPrice.getText()));
     }
 
-    public void removeFirstProduct() {//DE COMPLETAT
+    public void removeFirstProduct() {
+        waitForToastToDisappear();
+
+        List<WebElement> removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
+
+        if (removeButtons.size() == 0) {
+            System.out.println("Nu exista produse in cos.");
+            return;
+        }
+
+        WebElement firstRemoveButton = removeButtons.get(0);
+
+        getWait().until(ExpectedConditions.elementToBeClickable(firstRemoveButton));
+        firstRemoveButton.click();
+
+        waitForToastToDisappear();
     }
 }

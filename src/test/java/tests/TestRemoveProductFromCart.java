@@ -16,7 +16,7 @@ public class TestRemoveProductFromCart extends SharedData {
         - sterg unul dintre produse
         - verific ca totalul s-a actualizat corect
      */
-
+    @Test
     public void testRemoveProductFromCart() {
 
         HomePage homePage = new HomePage(getDriver());
