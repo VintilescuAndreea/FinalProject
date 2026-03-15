@@ -2,10 +2,9 @@ package tests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.CartPage;
-import pages.HomePage;
 import sharedData.SharedData;
 import utils.LogUtility;
+import utils.TestUtility;
 
 public class TestRemoveAllProductFromCart extends SharedData {
     // Sterg toate produsele din cos si verific ca totalul este 0
@@ -20,44 +19,20 @@ public class TestRemoveAllProductFromCart extends SharedData {
 
     @Test
     public void testRemoveAllProductsFromCart() {
-
-        HomePage homePage = new HomePage(getDriver());
-        CartPage cartPage = new CartPage(getDriver());
-        LogUtility logUtility = new LogUtility();
+        TestUtility testUtility = new TestUtility(getDriver());
 
         int numberOfProductsToAdd = 5;
-        int maxProductsToTry = 20;
-        int addedProducts = 0;
-
-        for (int index = 1; index <= maxProductsToTry && addedProducts < numberOfProductsToAdd; index++) {
-
-            homePage.navigateToHomePage();
-            logUtility.infoLog("Am accesat home pentru produsul cu index: " + index);
-
-            homePage.openProductFromListByIndex(index);
-
-            if (homePage.isAddToCartAvailable()) {
-                homePage.clickAddToCart();
-                addedProducts++;
-                logUtility.infoLog("Produs adaugat in cos. Total produse: " + addedProducts);
-            }
-        }
+        int addedProducts = testUtility.addMultipleProductsToCart(numberOfProductsToAdd);
 
         Assert.assertEquals(addedProducts, numberOfProductsToAdd,
                 "Nu s-au putut adauga suficiente produse.");
 
-        if (homePage.isCartButtonDisplayed()) {
-            homePage.clickCartButton();
-            LogUtility.infoLog("Am accesat cosul.");
-        } else {
-            LogUtility.infoLog("Cart button nu este vizibil!");
-            return;
-        }
+        testUtility.navigateToCart();
 
-        cartPage.removeAllProducts();
+        testUtility.getCartPage().removeAllProducts();
         LogUtility.infoLog("Au fost sterse toate produsele din cos.");
 
-        boolean isCartEmpty = cartPage.isCartEmpty();
+        boolean isCartEmpty = testUtility.getCartPage().isCartEmpty();
         if (isCartEmpty) {
             LogUtility.infoLog("Coșul este gol. Test trecut!");
         } else {

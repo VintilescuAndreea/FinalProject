@@ -2,10 +2,9 @@ package tests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.CartPage;
-import pages.HomePage;
 import sharedData.SharedData;
 import utils.LogUtility;
+import utils.TestUtility;
 
 public class TestRemoveProductFromCart extends SharedData {
     /* Adaug mai multe produse -> verific ca totalul este corect -> sterg un produs -> verific ca totalul s-a actualizat corect
@@ -20,42 +19,25 @@ public class TestRemoveProductFromCart extends SharedData {
 
     @Test
     public void testRemoveProductFromCart() {
-
-        HomePage homePage = new HomePage(getDriver());
-        CartPage cartPage = new CartPage(getDriver());
-        LogUtility logUtility = new LogUtility();
+        TestUtility testUtility = new TestUtility(getDriver());
 
         int numberOfProductsToAdd = 2;
-        int maxProductsToTry = 20;
-        int addedProducts = 0;
+        int addedProducts = testUtility.addMultipleProductsToCart(numberOfProductsToAdd);
 
-        for (int index = 1; index <= maxProductsToTry && addedProducts < numberOfProductsToAdd; index++) {
-
-            homePage.navigateToHomePage();
-            logUtility.infoLog("Am accesat home pentru produsul cu index: " + index);
-
-            homePage.openProductFromListByIndex(index);
-
-            if (homePage.isAddToCartAvailable()) {
-                homePage.clickAddToCart();
-                addedProducts++;
-                logUtility.infoLog("Produs adaugat in cos. Total produse: " + addedProducts);
-            }
-        }
         Assert.assertEquals(addedProducts, numberOfProductsToAdd, "Nu s-au putut adauga suficiente produse in cos pentru test.");
-        Assert.assertTrue(homePage.isCartButtonDisplayed(), "Cart button nu este vizibil dupa adaugarea produselor.");
+        Assert.assertTrue(testUtility.getHomePage().isCartButtonDisplayed(), "Cart button nu este vizibil dupa adaugarea produselor.");
 
-        homePage.clickCartButton();
+        testUtility.getHomePage().clickCartButton();
         LogUtility.infoLog("Am accesat cosul.");
 
-        double totalBeforeRemoval = cartPage.getTotalPrice();
-        logUtility.infoLog("Total inainte de stergere: " + totalBeforeRemoval);
+        double totalBeforeRemoval = testUtility.getCartPage().getTotalPrice();
+        LogUtility.infoLog("Total inainte de stergere: " + totalBeforeRemoval);
 
-        cartPage.removeFirstProduct();
-        logUtility.infoLog("Primul produs a fost sters din cos.");
+        testUtility.getCartPage().removeFirstProduct();
+        LogUtility.infoLog("Primul produs a fost sters din cos.");
 
-        double totalAfterRemoval = cartPage.getTotalPrice();
-        logUtility.infoLog("Total dupa stergere: " + totalAfterRemoval);
+        double totalAfterRemoval = testUtility.getCartPage().getTotalPrice();
+        LogUtility.infoLog("Total dupa stergere: " + totalAfterRemoval);
 
         Assert.assertTrue(totalAfterRemoval < totalBeforeRemoval, "Totalul dupa stergerea primului produs ar trebui sa fie mai mic.");
     }

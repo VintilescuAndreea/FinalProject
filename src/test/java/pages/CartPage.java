@@ -33,8 +33,7 @@ public class CartPage extends BasePage {
     }
 
     public void waitUntilCheckoutIsOpened() {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.urlContains("/checkout"));
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.urlContains("/checkout"));
     }
 
     public double calculateTotalOfProducts() {
@@ -51,8 +50,7 @@ public class CartPage extends BasePage {
     }
 
     public double displayCheckoutTotal() {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOf(totalPrice));
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(totalPrice));
 
         return round(parsePrice(totalPrice.getText()));
     }
@@ -88,11 +86,8 @@ public class CartPage extends BasePage {
     }
     public void waitForToastToDisappear() {
         try {
-            getWait().until(ExpectedConditions.invisibilityOfElementLocated(
-                    By.cssSelector("div.toast-success") // ajustează selectorul după clasa toast-ului tău
-            ));
+            getWait().until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div.toast-success")));
         } catch (TimeoutException e) {
-            // Dacă toast-ul nu dispare în timp, continuăm
         }
     }
 
@@ -103,13 +98,9 @@ public class CartPage extends BasePage {
         List<WebElement> removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
 
         while (!removeButtons.isEmpty()) {
-            // Click pe primul buton
             getWait().until(ExpectedConditions.elementToBeClickable(removeButtons.get(0))).click();
 
-            // Așteaptă să dispară toast-ul sau confirmarea ștergerii
             waitForToastToDisappear();
-
-            // Reia lista după fiecare ștergere
             removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
         }
     }
@@ -118,11 +109,7 @@ public class CartPage extends BasePage {
     }
 
     public double getTotalPrice() {
-        WebElement total = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[data-test='cart-total']")
-                ));
-
+        WebElement total = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test='cart-total']")));
         return round(parsePrice(total.getText()));
     }
 
@@ -146,7 +133,6 @@ public class CartPage extends BasePage {
 
         waitForToastToDisappear();
 
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.numberOfElementsToBeLessThan(removeButtonBy, productsBefore));
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.numberOfElementsToBeLessThan(removeButtonBy, productsBefore));
     }
 }
