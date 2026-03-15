@@ -1,5 +1,6 @@
 package tests;
-//  DE TERMINAT
+
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.CartPage;
 import pages.HomePage;
@@ -16,6 +17,7 @@ public class TestRemoveProductFromCart extends SharedData {
         - sterg unul dintre produse
         - verific ca totalul s-a actualizat corect
      */
+
     @Test
     public void testRemoveProductFromCart() {
 
@@ -40,14 +42,11 @@ public class TestRemoveProductFromCart extends SharedData {
                 logUtility.infoLog("Produs adaugat in cos. Total produse: " + addedProducts);
             }
         }
+        Assert.assertEquals(addedProducts, numberOfProductsToAdd, "Nu s-au putut adauga suficiente produse in cos pentru test.");
+        Assert.assertTrue(homePage.isCartButtonDisplayed(), "Cart button nu este vizibil dupa adaugarea produselor.");
 
-        if (homePage.isCartButtonDisplayed()) {
-            homePage.clickCartButton();
-            LogUtility.infoLog("Am accesat cosul.");
-        } else {
-            LogUtility.infoLog("Cart button nu este vizibil!");
-            return;
-        }
+        homePage.clickCartButton();
+        LogUtility.infoLog("Am accesat cosul.");
 
         double totalBeforeRemoval = cartPage.getTotalPrice();
         logUtility.infoLog("Total inainte de stergere: " + totalBeforeRemoval);
@@ -58,6 +57,6 @@ public class TestRemoveProductFromCart extends SharedData {
         double totalAfterRemoval = cartPage.getTotalPrice();
         logUtility.infoLog("Total dupa stergere: " + totalAfterRemoval);
 
+        Assert.assertTrue(totalAfterRemoval < totalBeforeRemoval, "Totalul dupa stergerea primului produs ar trebui sa fie mai mic.");
     }
-
 }

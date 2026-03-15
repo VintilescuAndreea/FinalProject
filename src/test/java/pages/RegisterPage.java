@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
 public class RegisterPage extends BasePage{
 
@@ -58,7 +59,8 @@ public class RegisterPage extends BasePage{
         postalCodeInput.sendKeys(postalCode);
         cityInput.sendKeys(city);
         stateInput.sendKeys(state);
-        countrySelect.sendKeys(country);
+        Select countryDropdown = new Select(countrySelect);
+        countryDropdown.selectByVisibleText(country);
         phoneInput.sendKeys(phone);
         emailInput.sendKeys(email);
         passwordInput.sendKeys(password);

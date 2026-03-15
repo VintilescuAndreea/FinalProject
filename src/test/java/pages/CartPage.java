@@ -1,6 +1,10 @@
 package pages;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -88,6 +92,7 @@ public class CartPage extends BasePage {
                     By.cssSelector("div.toast-success") // ajustează selectorul după clasa toast-ului tău
             ));
         } catch (TimeoutException e) {
+            // Dacă toast-ul nu dispare în timp, continuăm
         }
     }
 
@@ -98,8 +103,13 @@ public class CartPage extends BasePage {
         List<WebElement> removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
 
         while (!removeButtons.isEmpty()) {
+            // Click pe primul buton
             getWait().until(ExpectedConditions.elementToBeClickable(removeButtons.get(0))).click();
+
+            // Așteaptă să dispară toast-ul sau confirmarea ștergerii
             waitForToastToDisappear();
+
+            // Reia lista după fiecare ștergere
             removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
         }
     }
@@ -108,27 +118,35 @@ public class CartPage extends BasePage {
     }
 
     public double getTotalPrice() {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOf(totalPrice));
+        WebElement total = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector("[data-test='cart-total']")
+                ));
 
-        return round(parsePrice(totalPrice.getText()));
+        return round(parsePrice(total.getText()));
     }
 
     public void removeFirstProduct() {
         waitForToastToDisappear();
 
-        List<WebElement> removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
+        By removeButtonBy = By.cssSelector(".btn.btn-danger");
+        List<WebElement> currentRemoveButtons = driver.findElements(removeButtonBy);
 
-        if (removeButtons.size() == 0) {
-            System.out.println("Nu exista produse in cos.");
-            return;
+        if (currentRemoveButtons.isEmpty()) {
+            throw new IllegalStateException("Nu exista produse in cos pentru stergere.");
         }
 
-        WebElement firstRemoveButton = removeButtons.get(0);
+        int productsBefore = currentRemoveButtons.size();
 
-        getWait().until(ExpectedConditions.elementToBeClickable(firstRemoveButton));
-        firstRemoveButton.click();
+        try {
+            getWait().until(ExpectedConditions.elementToBeClickable(currentRemoveButtons.get(0))).click();
+        } catch (StaleElementReferenceException exception) {
+            getWait().until(ExpectedConditions.elementToBeClickable(removeButtonBy)).click();
+        }
 
         waitForToastToDisappear();
+
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.numberOfElementsToBeLessThan(removeButtonBy, productsBefore));
     }
 }

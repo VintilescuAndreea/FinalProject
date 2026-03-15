@@ -18,15 +18,19 @@ public class LoginPage extends BasePage {
     @FindBy(id = "password")
     private WebElement passwordInput;
 
-    @FindBy( className ="btnSubmit")
+    @FindBy(className = "btnSubmit")
     private WebElement loginButton;
 
     @FindBy(xpath = "//a[@data-test='register-link']")
     private WebElement registerLink;
 
     public void login(String email, String password) {
+        emailInput.clear();
         emailInput.sendKeys(email);
+
+        passwordInput.clear();
         passwordInput.sendKeys(password);
+
         loginButton.click();
     }
 
