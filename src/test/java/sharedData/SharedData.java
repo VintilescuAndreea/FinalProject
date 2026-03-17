@@ -18,7 +18,7 @@ public class SharedData {
     public void prepareEnvironment() {
         testName = this.getClass().getSimpleName();
         driver = new ChromeDriver();
-        driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+        driver.get("https://practicesoftwaretesting.com/");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 

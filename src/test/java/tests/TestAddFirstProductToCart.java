@@ -19,8 +19,7 @@ public class TestAddFirstProductToCart extends SharedData {
         testUtility.getHomePage().clickAddToCart();
         LogUtility.infoLog(" Am adaugat produsul in cos. ");
 
-        Assert.assertTrue(testUtility.getHomePage().isCartButtonDisplayed(),
-                "Butonul de cart ar trebui sa fie vizibil in header dupa adaugarea unui produs in cosul de cumparaturi.");
+        Assert.assertTrue(testUtility.getHomePage().isCartButtonDisplayed(), "Butonul de cart ar trebui sa fie vizibil in header dupa adaugarea unui produs in cosul de cumparaturi.");
         LogUtility.infoLog(" Am verificat ca butonul de cart este vizibil in header. ");
         testUtility.getHomePage().clickCartButton();
         LogUtility.infoLog("Am dat click pe butonul de cart pentru a naviga catre pagina de cart ");

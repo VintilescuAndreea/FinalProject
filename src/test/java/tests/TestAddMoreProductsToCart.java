@@ -15,11 +15,8 @@ public class TestAddMoreProductsToCart extends SharedData {
         int targetProductsToAdd = 5;
         int addedProducts = testUtility.addMultipleProductsToCart(targetProductsToAdd);
 
-        Assert.assertEquals(addedProducts, targetProductsToAdd,
-                "Nu am reusit sa adaug " + targetProductsToAdd + " produse disponibile in cos.");
-
-        Assert.assertTrue(testUtility.getHomePage().isCartButtonDisplayed(),
-                "Butonul de cart ar trebui sa fie vizibil in header dupa adaugarea produselor in cos.");
+        Assert.assertEquals(addedProducts, targetProductsToAdd, "Nu am reusit sa adaug " + targetProductsToAdd + " produse disponibile in cos.");
+        Assert.assertTrue(testUtility.getHomePage().isCartButtonDisplayed(), "Butonul de cart ar trebui sa fie vizibil in header dupa adaugarea produselor in cos.");
 
         testUtility.getHomePage().clickCartButton();
         testUtility.getCartPage().waitUntilCheckoutIsOpened();

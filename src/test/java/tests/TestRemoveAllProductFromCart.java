@@ -24,9 +24,7 @@ public class TestRemoveAllProductFromCart extends SharedData {
         int numberOfProductsToAdd = 5;
         int addedProducts = testUtility.addMultipleProductsToCart(numberOfProductsToAdd);
 
-        Assert.assertEquals(addedProducts, numberOfProductsToAdd,
-                "Nu s-au putut adauga suficiente produse.");
-
+        Assert.assertEquals(addedProducts, numberOfProductsToAdd, "Nu s-au putut adauga suficiente produse.");
         testUtility.navigateToCart();
 
         testUtility.getCartPage().removeAllProducts();
