@@ -20,18 +20,25 @@ public class TestFindProductsByName extends SharedData {
 
         LogUtility.infoLog(" Am accesat pagina de home. ");
         testUtility.getHomePage().navigateToHomePage();
-        String productName = "hammer";
+        String productName = "pliers";
         LogUtility.infoLog("Caut produsul: " + productName);
         testUtility.getHomePage().searchForProduct(productName);
 
-        List<WebElement> matchedProducts = testUtility.getHomePage().findProductByName(productName);
+        List<String> matchedProducts = testUtility.getHomePage().findProductByName(productName);
 
-        for (WebElement product : matchedProducts) {
-            assertTrue(product.getText().toLowerCase().contains(productName.toLowerCase()),
-                    "Produsul gasit nu contine textul cautat: " + product.getText());
+        for ( String product : matchedProducts) {
+            assertTrue(product.toLowerCase().contains(productName.toLowerCase()));
         }
 
-        LogUtility.infoLog("Total produse gasite cu numele '" + productName + "': " + matchedProducts.size());
+        LogUtility.infoLog("Totalul produselor gasite cu numele '" + productName + "': " + matchedProducts.size());
 
     }
 }
+/* Probleme intampinate:
+        - Nu pare ca merge search-ul, trebuie s ami aduca 7 produse, nu 4..-> nu se reincarca lista noua de produse
+          am folosit stalenessOf(initialProducts.get(0)) - practic asteapta pana cand primul element din lista initiala devine stale,
+          adica nu mai este in DOM, ceea ce indica faptul ca lista de produse a fost actualizata dupa cautare.
+
+        - ??  DAR DACA NU SE SCHIMBA PRIMUL ELEM? Pun de ex pliers, care e primul el din lista si nu pare sa se schimbe...
+          help de la gepeto: am prins exceptia si daca reapare refac elementul din DOM ca sa il pot citi din nou
+ */

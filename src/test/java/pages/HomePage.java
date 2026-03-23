@@ -1,9 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.bidi.log.Log;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -131,26 +128,41 @@ public class HomePage extends BasePage {
        LogUtility.infoLog("Produsele au fost sortate corect. ");
     }
 
-    public void searchForProduct(String productName) {
+    public void searchForProduct(String product) {
         WebElement searchField = getWait().until(ExpectedConditions.elementToBeClickable(searchInput));
         searchField.clear();
-        searchField.sendKeys(productName);
+        searchField.sendKeys(product);
         searchButton.click();
-        infoLog("Am introdus in campul de cautare numele produsului: " + productName + " si am apasat pe butonul de search. ");
+        infoLog("Am introdus in campul de cautare: " + product + " si am apasat pe butonul de search.");
+
+        getWait().until(ExpectedConditions.textToBe(By.xpath("//span[@data-test='search-term']"), product));
+        infoLog("Sunt listate toate produsele care contin termenul " + product +"'.");
     }
 
-    public List<WebElement> findProductByName(String productName) {
+    public List<String> findProductByName(String product) {
+        List<String> matchedProducts = new ArrayList<>();
+        getWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//h5[@data-test='product-name']")));
 
-        List<WebElement> products = getWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//h5[@data-test='product-name']")));
-        List <WebElement> matchedProducts = new ArrayList<>();
-        for (WebElement product : products) {
-            String name = product.getText().trim();
-            infoLog("Am gasit produsul cu numele: " + name);
-            if (name.toLowerCase().contains(productName.toLowerCase())) {
-                matchedProducts.add(product);
+        List<WebElement> productElements = driver.findElements(By.xpath("//h5[@data-test='product-name']"));
+
+        for (WebElement element : productElements) {
+            try {
+                String name = element.getText().trim();
+                if (name.toLowerCase().contains(product.toLowerCase())) {
+                    matchedProducts.add(name);
+                    LogUtility.infoLog("Am gasit produsul cu numele: '" + name+ "'.");
+                }
+            } catch (StaleElementReferenceException e) {
+                // m a ajutat gepeto
+                LogUtility.infoLog("Elementul a devenit stale, îl refetchăm...");
+                WebElement freshElement = driver.findElement(By.xpath("//h5[@data-test='product-name'][text()='" + element.getText() + "']"));
+                String name = freshElement.getText().trim();
+                if (name.toLowerCase().contains(product.toLowerCase())) {
+                    matchedProducts.add(name);
+                }
+            }
         }
-    }
-        infoLog("Au fost gasite " + matchedProducts.size() + " produse care se potrivesc cu numele cautat: " + productName);
+
         return matchedProducts;
     }
 }
