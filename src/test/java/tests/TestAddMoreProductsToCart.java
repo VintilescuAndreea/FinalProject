@@ -24,8 +24,8 @@ public class TestAddMoreProductsToCart extends SharedData {
         double calculatedTotal = testUtility.getCartPage().calculateTotalOfProducts();
         double displayedTotal = testUtility.getCartPage().displayCheckoutTotal();
 
-        LogUtility.infoLog("Total calculat din produsele din cos: " + calculatedTotal);
-        LogUtility.infoLog("Total afisat din cosul de cumparaturi: " + displayedTotal);
+        LogUtility.infoLog("Total calculat pentru produsele din cos: " + calculatedTotal);
+        LogUtility.infoLog("Total afisat pentru cosul de cumparaturi: " + displayedTotal);
 
         Assert.assertEquals(calculatedTotal, displayedTotal, 0.01,
                 "Totalul afisat nu corespunde cu suma produselor din cos.");

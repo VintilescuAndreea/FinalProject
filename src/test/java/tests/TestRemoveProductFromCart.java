@@ -24,20 +24,20 @@ public class TestRemoveProductFromCart extends SharedData {
         int numberOfProductsToAdd = 2;
         int addedProducts = testUtility.addMultipleProductsToCart(numberOfProductsToAdd);
 
-        Assert.assertEquals(addedProducts, numberOfProductsToAdd, "Nu s-au putut adauga suficiente produse in cos pentru test.");
-        Assert.assertTrue(testUtility.getHomePage().isCartButtonDisplayed(), "Cart button nu este vizibil dupa adaugarea produselor.");
+        Assert.assertEquals(addedProducts, numberOfProductsToAdd, "Nu s au putut adauga suficiente produse in cos pentru test.");
+        Assert.assertTrue(testUtility.getHomePage().isCartButtonDisplayed(), "Butonul pt cosul de cumparaturi nu este vizibil dupa adaugarea produselor.");
 
         testUtility.getHomePage().clickCartButton();
         LogUtility.infoLog("Am accesat cosul.");
 
         double totalBeforeRemoval = testUtility.getCartPage().getTotalPrice();
-        LogUtility.infoLog("Total inainte de stergere: " + totalBeforeRemoval);
+        LogUtility.infoLog("Totalul inainte de stergere: " + totalBeforeRemoval);
 
         testUtility.getCartPage().removeFirstProduct();
         LogUtility.infoLog("Primul produs a fost sters din cos.");
 
         double totalAfterRemoval = testUtility.getCartPage().getTotalPrice();
-        LogUtility.infoLog("Total dupa stergere: " + totalAfterRemoval);
+        LogUtility.infoLog("Totalul dupa stergere: " + totalAfterRemoval);
 
         Assert.assertTrue(totalAfterRemoval < totalBeforeRemoval, "Totalul dupa stergerea primului produs ar trebui sa fie mai mic.");
     }

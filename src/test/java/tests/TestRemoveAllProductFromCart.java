@@ -24,7 +24,7 @@ public class TestRemoveAllProductFromCart extends SharedData {
         int numberOfProductsToAdd = 5;
         int addedProducts = testUtility.addMultipleProductsToCart(numberOfProductsToAdd);
 
-        Assert.assertEquals(addedProducts, numberOfProductsToAdd, "Nu s-au putut adauga suficiente produse.");
+        Assert.assertEquals(addedProducts, numberOfProductsToAdd, "Nu s au putut adauga suficiente produse.");
         testUtility.navigateToCart();
 
         testUtility.getCartPage().removeAllProducts();
@@ -32,9 +32,9 @@ public class TestRemoveAllProductFromCart extends SharedData {
 
         boolean isCartEmpty = testUtility.getCartPage().isCartEmpty();
         if (isCartEmpty) {
-            LogUtility.infoLog("Coșul este gol. Test trecut!");
+            LogUtility.infoLog("Cosul este gol. Test trecut!");
         } else {
-            LogUtility.infoLog("Coșul NU este gol. Test eșuat!");
+            LogUtility.infoLog("Cosul NU este gol. Test esuat!");
         }
     }
 }

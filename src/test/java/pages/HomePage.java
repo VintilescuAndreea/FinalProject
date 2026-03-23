@@ -102,30 +102,35 @@ public class HomePage extends BasePage {
     public void sortProductsByPriceLowToHigh() {
         WebElement dropdown = getWait().until(ExpectedConditions.elementToBeClickable(sortByDropdown));
         dropdown.click();
-        infoLog("Am apasat pe dropdown pentru sortare");
+        LogUtility.infoLog("Am apasat pe dropdown pentru sortare");
+
         WebElement option = getWait().until(ExpectedConditions.elementToBeClickable(By.xpath("//option[@value='price,asc']")));
         option.click();
-        infoLog("Am selectat optiunea de sortare dupa pret crescator. ");
+        LogUtility.infoLog("Am selectat optiunea de sortare dupa pret crescator");
+
         getWait().until(ExpectedConditions.visibilityOfAllElements(productPrices));
-        LogUtility.infoLog("Am asteptat sa se incarce preturile produselor dupa sortare. ");
+        LogUtility.infoLog("Am asteptat sa se incarce preturile produselor dupa sortare.");
     }
 
     public void verifyOrder() {
-        List<WebElement> pricesElements = getWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("[data-test='product-price']")));
+        List<WebElement> pricesElements = getWait().until(
+                ExpectedConditions.visibilityOfAllElements(productPrices));
 
-        List<Double> prices = new ArrayList<>();
-       for (WebElement price : productPrices) {
-           String priceText = price.getText().replace("$", "").trim();
-           prices.add(Double.parseDouble(priceText));
-           LogUtility.infoLog("A fost listat produsul cu pretul: " + priceText);
-       }
-       LogUtility.infoLog("Incepe verificarea ordinii preturilor. ");
-       for (int i = 0; i < prices.size() - 1; i++) {
-           if (prices.get(i) > prices.get(i + 1)) {
-               throw new AssertionError("Produsele nu sunt sortate corect dupa pret. Pretul " + prices.get(i) + " este mai mare decat " + prices.get(i + 1));
-           }
-       }
-       LogUtility.infoLog("Produsele au fost sortate corect. ");
+        List<Double> prices = new ArrayList<Double>();
+        for (WebElement price : pricesElements) {
+            String priceText = price.getText().replace("$", "").trim();
+            prices.add(Double.parseDouble(priceText));
+            LogUtility.infoLog("A fost listat produsul cu pretul: " + priceText);
+        }
+        LogUtility.infoLog("Incepe verificarea ordinii preturilor.");
+
+        for (int i = 0; i < prices.size() - 1; i++) {
+            if (prices.get(i) > prices.get(i + 1)) {
+                throw new AssertionError("Produsele nu sunt sortate corect dupa pret. Pretul " + prices.get(i) + " este mai mare decat " + prices.get(i + 1));
+            }
+        }
+
+        LogUtility.infoLog("Produsele au fost sortate corect.");
     }
 
     public void searchForProduct(String product) {

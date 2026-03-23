@@ -17,9 +17,9 @@ public class TestSuccessfulLogin extends SharedData {
                 "Iuliu Maniu", "061126", "Bucharest", "Sector 6",
                 "Romania", "0765354782", "vinti23@gmail.com", "Parola123!");
 
-        LogUtility.infoLog("Completeaza formularul de inregistrare cu date valide si apasa pe butonul 'Register'");
+        LogUtility.infoLog("Am completat formularul de inregistrare cu date valide si am apasat pe butonul 'Register'");
 
         testUtility.getLoginPage().login("vinti23@gmail.com", "Parola123!");
-        LogUtility.infoLog("Completeaza formularul de login cu email-ul si parola inregistrate anterior si apasa pe butonul 'Login'");
+        LogUtility.infoLog("Am completat formularul de login cu email-ul si parola inregistrate anterior si am apasat pe butonul 'Login'");
     }
 }

@@ -18,7 +18,7 @@ public class TestFindProductsByName extends SharedData {
 
         TestUtility testUtility = new TestUtility(getDriver());
 
-        LogUtility.infoLog(" Am accesat pagina de home. ");
+        LogUtility.infoLog(" Am accesat Home Page. ");
         testUtility.getHomePage().navigateToHomePage();
         String productName = "pliers";
         LogUtility.infoLog("Caut produsul: " + productName);

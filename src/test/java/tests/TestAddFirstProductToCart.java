@@ -13,7 +13,7 @@ public class TestAddFirstProductToCart extends SharedData {
         TestUtility testUtility = new TestUtility(getDriver());
 
         testUtility.getHomePage().navigateToHomePage();
-        LogUtility.infoLog(" Am accesat pagina de home. ");
+        LogUtility.infoLog(" Am accesat Home Page. ");
         testUtility.getHomePage().openFirstProductFromList();
         LogUtility.infoLog(" Am deschis primul produs din lista de produse. ");
         testUtility.getHomePage().clickAddToCart();
