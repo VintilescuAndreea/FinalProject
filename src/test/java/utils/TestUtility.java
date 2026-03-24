@@ -8,11 +8,11 @@ import org.openqa.selenium.WebDriver;
 
 public class TestUtility {
 
-    private WebDriver driver;
-    private HomePage homePage;
-    private CartPage cartPage;
-    private LoginPage loginPage;
-    private RegisterPage registerPage;
+    private final WebDriver driver;
+    private final HomePage homePage;
+    private final CartPage cartPage;
+    private final LoginPage loginPage;
+    private final RegisterPage registerPage;
 
     public TestUtility(WebDriver driver) {
         this.driver = driver;

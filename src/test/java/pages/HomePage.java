@@ -1,14 +1,11 @@
 package pages;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.bidi.log.Log;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.LogUtility;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +19,6 @@ public class HomePage extends BasePage {
     }
 
     private static final String url = "https://practicesoftwaretesting.com/";
-    private static final Duration waitTime = Duration.ofSeconds(10);
 
     @FindBy(css = "[data-test='nav-sign-in']")
     private WebElement signInButton;

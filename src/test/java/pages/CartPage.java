@@ -18,58 +18,58 @@ public class CartPage extends BasePage {
     @FindBy(css = "[data-test='cart-total']")
     private WebElement totalPrice;
 
-    @FindBy( xpath ="//a[@class='btn btn-danger']")
+    @FindBy(xpath = "//a[@class='btn btn-danger']")
     private List<WebElement> removeButtons;
 
-    @FindBy (xpath = "//button[@data-test='proceed-1']")
+    @FindBy(xpath = "//button[@data-test='proceed-1']")
     private WebElement CheckoutButton1;
 
     @FindBy(css = "tr.ng-star-inserted")
     private List<WebElement> cartProducts;
 
-    @FindBy (xpath = "(//input[@data-test='product-quantity'])[1]")
+    @FindBy(xpath = "(//input[@data-test='product-quantity'])[1]")
     private WebElement quantityInput;
 
-    @FindBy (xpath="//a[@href='#guest-tab']")
+    @FindBy(xpath = "//a[@href='#guest-tab']")
     private WebElement guestCheckoutTab;
 
-    @FindBy (xpath = "//input[@id='guest-email']")
+    @FindBy(xpath = "//input[@id='guest-email']")
     private WebElement guestEmailInput;
 
-    @FindBy (xpath = "//input[@id='guest-first-name']")
+    @FindBy(xpath = "//input[@id='guest-first-name']")
     private WebElement guestFirstNameInput;
 
-    @FindBy (xpath = "//input[@id='guest-last-name']")
+    @FindBy(xpath = "//input[@id='guest-last-name']")
     private WebElement guestLastNameInput;
 
-    @FindBy (xpath = "//input[@data-test='guest-submit']")
+    @FindBy(xpath = "//input[@data-test='guest-submit']")
     private WebElement guestSubmitButton;
 
-    @FindBy (xpath = "//button[@data-test='proceed-2-guest']")
+    @FindBy(xpath = "//button[@data-test='proceed-2-guest']")
     private WebElement checkoutButton2;
 
-    @FindBy (xpath = "//input[@id='street']")
+    @FindBy(xpath = "//input[@id='street']")
     private WebElement streetInputGuest;
 
-    @FindBy (xpath = "//input[@id='city']")
+    @FindBy(xpath = "//input[@id='city']")
     private WebElement cityInputGuest;
 
-    @FindBy (xpath = "//input[@id='state']")
+    @FindBy(xpath = "//input[@id='state']")
     private WebElement stateInputGuest;
 
-    @FindBy (xpath = "//input[@id='country']")
+    @FindBy(xpath = "//input[@id='country']")
     private WebElement countryInputGuest;
 
-    @FindBy (xpath = "//input[@id='postal_code']")
+    @FindBy(xpath = "//input[@id='postal_code']")
     private WebElement postalCodeInputGuest;
 
-    @FindBy (xpath = "//button[@data-test='proceed-3']")
+    @FindBy(xpath = "//button[@data-test='proceed-3']")
     private WebElement checkoutButton3;
 
-    @FindBy (xpath = "//select[@id='payment-method']")
+    @FindBy(xpath = "//select[@id='payment-method']")
     private WebElement paymentMethod;
 
-    @FindBy(xpath="//button[@data-test='finish']")
+    @FindBy(xpath = "//button[@data-test='finish']")
     private WebElement finishButton;
 
     public CartPage(WebDriver driver) {
@@ -129,6 +129,7 @@ public class CartPage extends BasePage {
     private double round(double value) {
         return Math.round(value * 100.0) / 100.0;
     }
+
     public void waitForToastToDisappear() {
         try {
             getWait().until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div.toast-success")));
@@ -149,6 +150,7 @@ public class CartPage extends BasePage {
             removeButtons = driver.findElements(By.cssSelector(".btn.btn-danger"));
         }
     }
+
     public boolean isCartEmpty() {
         return cartProducts.isEmpty();
     }
@@ -229,155 +231,8 @@ public class CartPage extends BasePage {
         return Integer.parseInt(quantityInput.getAttribute("value"));
     }
 
-    public void setQuantityInput(WebElement quantityInput) {
-        this.quantityInput = quantityInput;
-    }
-
-    public List<WebElement> getCartProducts() {
-        return cartProducts;
-    }
-
-    public void setCartProducts(List<WebElement> cartProducts) {
-        this.cartProducts = cartProducts;
-    }
-
-    public List<WebElement> getRemoveButtons() {
-        return removeButtons;
-    }
-
-    public void setRemoveButtons(List<WebElement> removeButtons) {
-        this.removeButtons = removeButtons;
-    }
-
-    public void setTotalPrice(WebElement totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public List<WebElement> getLinePrices() {
-        return linePrices;
-    }
-
-    public void setLinePrices(List<WebElement> linePrices) {
-        this.linePrices = linePrices;
-    }
-
-    public WebElement getCheckoutButton1() {
-        return CheckoutButton1;
-    }
-
-    public void setCheckoutButton1(WebElement checkoutButton1) {
-        CheckoutButton1 = checkoutButton1;
-    }
-
-    public WebElement getGuestCheckoutTab() {
-        return guestCheckoutTab;
-    }
-
-    public void setGuestCheckoutTab(WebElement guestCheckoutTab) {
-        this.guestCheckoutTab = guestCheckoutTab;
-    }
-
-    public WebElement getGuestEmailInput() {
-        return guestEmailInput;
-    }
-
-    public void setGuestEmailInput(WebElement guestEmailInput) {
-        this.guestEmailInput = guestEmailInput;
-    }
-
-    public WebElement getGuestFirstNameInput() {
-        return guestFirstNameInput;
-    }
-
-    public void setGuestFirstNameInput(WebElement guestFirstNameInput) {
-        this.guestFirstNameInput = guestFirstNameInput;
-    }
-
-    public WebElement getGuestLastNameInput() {
-        return guestLastNameInput;
-    }
-
-    public void setGuestLastNameInput(WebElement guestLastNameInput) {
-        this.guestLastNameInput = guestLastNameInput;
-    }
-
-    public WebElement getGuestSubmitButton() {
-        return guestSubmitButton;
-    }
-
-    public void setGuestSubmitButton(WebElement guestSubmitButton) {
-        this.guestSubmitButton = guestSubmitButton;
-    }
-
-    public WebElement getCheckoutButton2() {
-        return checkoutButton2;
-    }
-
-    public void setCheckoutButton2(WebElement checkoutButton2) {
-        this.checkoutButton2 = checkoutButton2;
-    }
-
-    public WebElement getStreetInputGuest() {
-        return streetInputGuest;
-    }
-
-    public void setStreetInputGuest(WebElement streetInputGuest) {
-        this.streetInputGuest = streetInputGuest;
-    }
-
-    public WebElement getCityInputGuest() {
-        return cityInputGuest;
-    }
-
-    public void setCityInputGuest(WebElement cityInputGuest) {
-        this.cityInputGuest = cityInputGuest;
-    }
-
-    public WebElement getStateInputGuest() {
-        return stateInputGuest;
-    }
-
-    public void setStateInputGuest(WebElement stateInputGuest) {
-        this.stateInputGuest = stateInputGuest;
-    }
-
-    public WebElement getCountryInputGuest() {
-        return countryInputGuest;
-    }
-
-    public void setCountryInputGuest(WebElement countryInputGuest) {
-        this.countryInputGuest = countryInputGuest;
-    }
-
-    public WebElement getPostalCodeInputGuest() {
-        return postalCodeInputGuest;
-    }
-
-    public void setPostalCodeInputGuest(WebElement postalCodeInputGuest) {
-        this.postalCodeInputGuest = postalCodeInputGuest;
-    }
-
-    public WebElement getCheckoutButton3() {
-        return checkoutButton3;
-    }
-
-    public void setCheckoutButton3(WebElement checkoutButton3) {
-        this.checkoutButton3 = checkoutButton3;
-    }
-
-    public WebElement getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(WebElement paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
     public WebElement getFinishButton() {
         return finishButton;
     }
 
-    public void setFinishButton(WebElement finishButton) {
-        this.finishButton = finishButton;
-    }
 }
